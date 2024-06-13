@@ -189,6 +189,12 @@ type GetProfileRequestObject struct {
 	ProfileId UUID `json:"profile-id"`
 }
 
+type SearchProfileRequestObject struct {
+	TenantId  UUID `json:"tenant-id"`
+	Nin string `json:"nin"`
+	Email string `json:"email"`
+}
+
 type GetProfileResponseObject interface {
 	VisitGetProfileResponse(w http.ResponseWriter) error
 }

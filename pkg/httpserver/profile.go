@@ -31,6 +31,27 @@ func (s oapiServerImplementation) GetProfile(ctx context.Context, request oapi.G
 	}, nil
 }
 
+// GetProfile implements oapi.StrictServerInterface.
+func (s oapiServerImplementation) SearchProfile(ctx context.Context, request oapi.SearchProfileRequestObject) (oapi.GetProfileResponseObject, error) {
+	pr, err := s.h.profileRepo.SearchProfile(ctx, request.TenantId, request.Nin, request.Email)
+	if err != nil {
+		return nil, err
+	}
+	if pr == nil {
+		return oapi.GetProfile404Response{}, nil
+	}
+
+	return oapi.GetProfile200JSONResponse{
+		Id:       pr.ID,
+		TenantId: pr.TenantID,
+		Name:     pr.Name,
+		Nin:      pr.NIN,
+		Email:    pr.Email,
+		Dob:      pr.DOB,
+		Phone:    pr.Phone,
+	}, nil
+}
+
 // PostProfile implements oapi.StrictServerInterface.
 func (s oapiServerImplementation) PostProfile(ctx context.Context, request oapi.PostProfileRequestObject) (oapi.PostProfileResponseObject, error) {
 	id, err := uuid.NewV7()
